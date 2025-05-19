@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Multiverse Series - Enhanced Reader</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1E3A8A;
+            --secondary-color: #1E40AF;
+            --accent-color: #60A5FA;
+            --text-color: #E5E7EB;
+            --background-color: #0F172A;
+            --bg-gradient-start: #111827;
+            --bg-gradient-end: #0F172A;
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: linear-gradient(to bottom, var(--bg-gradient-start), var(--bg-gradient-end));
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .content-container {
+            height: calc(100vh - 16rem);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-color) var(--background-color);
+        }
+
+        .content-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .content-container::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .content-container::-webkit-scrollbar-thumb {
+            background-color: var(--accent-color);
+            border-radius: 20px;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .season-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: 2px solid var(--accent-color);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(96, 165, 250, 0.5);
+        }
+
+        .season-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.8);
+        }
+
+        .season-btn.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .volume-btn {
+            background: rgba(30, 58, 138, 0.7);
+            border: 1px solid var(--accent-color);
+            transition: all 0.3s ease;
+        }
+
+        .volume-btn:hover {
+            transform: scale(1.05);
+            background: rgba(30, 64, 175, 0.9);
+            box-shadow: 0 0 15px rgba(96, 165, 250, 0.5);
+        }
+
+        .nav-btn {
+            transition: all 0.3s ease;
+            background: rgba(30, 58, 138, 0.7);
+        }
+
+        .nav-btn:hover {
+            background: rgba(30, 64, 175, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 4s infinite;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+
+        .galaxy-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .volume-title {
+            background: linear-gradient(90deg, transparent, rgba(30, 58, 138, 0.7), transparent);
+            padding: 8px 0;
+        }
+
+        .content-section {
+            line-height: 1.8;
+        }
+
+        .content-section h2 {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section p {
+            margin-bottom: 1rem;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 5px rgba(96, 165, 250, 0.7);
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .portal-enter {
+            animation: portalEnter 0.8s ease-out;
+        }
+
+        @keyframes portalEnter {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(96, 165, 250, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(96, 165, 250, 0); }
+        }
+
+        .content-protect {
+            position: relative;
+        }
+
+        .content-protect::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: transparent;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .content-container {
+                height: calc(100vh - 20rem);
+            }
+            
+            .volume-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .volume-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body class="p-4" oncontextmenu="return false">
+    <div class="galaxy-background" id="stars"></div>
+
+    <header class="text-center mb-6">
+        <h1 class="orbitron text-5xl font-bold glow-text mb-2 animate__animated animate__fadeIn">THE MULTIVERSE</h1>
+        <p class="text-xl text-blue-300 animate__animated animate__fadeIn animate__delay-1s">An Epic Saga By Reco Bladers</p>
+    </header>
+
+    <div class="max-w-7xl mx-auto">
+        <div class="flex justify-center gap-4 mb-8">
+            <button class="season-btn orbitron py-3 px-8 rounded-lg text-lg font-bold focus:outline-none active" onclick="selectSeason(1)" id="season1Btn">
+                Season 1: The Awakening
+            </button>
+            <button class="season-btn orbitron py-3 px-8 rounded-lg text-lg font-bold focus:outline-none disabled opacity-60 cursor-not-allowed" disabled>
+                Season 2: Multiverse's Freedom
+                <span class="text-sm block mt-1">(Coming Soon)</span>
+            </button>
+        </div>
+
+        <div id="volumeSelector" class="fade-in mb-8">
+            <h2 class="orbitron text-2xl font-bold mb-4 text-center">Select a Volume</h2>
+            <div class="grid grid-cols-4 gap-4 volume-grid">
+                <!-- Volume buttons will be generated here -->
+            </div>
+        </div>
+
+        <div id="contentContainer" class="bg-black bg-opacity-60 p-6 rounded-lg border border-blue-500 shadow-lg hidden content-container content-protect">
+            <div id="volumeNavigation" class="flex justify-between mb-4">
+                <button id="prevVolume" class="nav-btn px-4 py-2 rounded-lg focus:outline-none flex items-center">
+                    <i class="fas fa-chevron-left mr-2"></i> Previous Volume
+                </button>
+                <button class="nav-btn px-4 py-2 rounded-lg focus:outline-none" onclick="showVolumeSelector()">
+                    <i class="fas fa-th mr-2"></i> Volume List
+                </button>
+                <button id="nextVolume" class="nav-btn px-4 py-2 rounded-lg focus:outline-none flex items-center">
+                    Next Volume <i class="fas fa-chevron-right ml-2"></i>
+                </button>
+            </div>
+
+            <div id="volumeTitle" class="orbitron text-3xl font-bold text-center mb-6 volume-title glow-text"></div>
+            
+            <article id="contentSection" class="content-section">
+                <!-- Content will be loaded here -->
+            </article>
+        </div>
+    </div>
+
+    <footer class="text-center mt-12 py-4 border-t border-blue-800">
+        <p class="text-blue-300">Made by Reco Bladers - All Rights Reserved</p>
+    </footer>
+
+    <script>
+        // Create stars for background
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starsCount = 150;
+            
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                star.style.left = `${left}%`;
+                star.style.top = `${top}%`;
+                
+                star.style.animationDelay = `${Math.random() * 4}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Volume data
+        const volumes = [
+            {
+                number: 1,
+                title: "The Chosen One",
+                content: `
+                    <h2 class="text-center mb-4">A Strange Arrival</h2>
+                    <p>The night was silent, except for the scratching of a pen against paper. Neorock, a 13-year-old boy, sat at his desk, flipping through the pages of his textbook. The dim glow of the study lamp cast shadows around his small room.</p>
+                    <p>Suddenly, a deep humming sound filled the air, making the walls tremble. Neorock's pen slipped from his fingers. The air around him grew heavy as a shimmering blue portal ripped open in the middle of the room.</p>
+                    <p>Neorock stumbled backward, his heart pounding. From the swirling energy, a tall figure emerged, draped in a flowing black cape. His silver eyes gleamed under the hood, his presence radiating power.</p>
+                    <p>Neorock froze. His body screamed at him to run, but he forced himself to speak.</p>
+                    <p>"W-Who are you?!" he stammered.</p>
+                    <p>The figure took a step forward, his voice calm but commanding.</p>
+                    <p>"I am Phantom. I have come from another universe to find you."</p>
+                    <p>Neorock's mind spun. "Another… universe?"</p>
+                    <p>Phantom nodded. "Yes. Your world, Earth, is part of the Milky Way in this multiverse. But I come from a different universe, one from the Nexus Universe."</p>
+                    <p>Neorock narrowed his eyes, still unsure whether to trust this stranger. "What do you want from me?"</p>
+                    <p>Phantom took a deep breath. "I have come to take you to Herlek, a planet in my universe. There is no time to explain everything here. The demon lord Arengoth is taking over the multiverse, and the Milky Way is next. You must come with me."</p>
+                    <p>Neorock's chest tightened. "Wait… taking over? You mean Earth is in danger?"</p>
+                    <p>Phantom's gaze darkened. "Not just in danger. Earth and the entire Milky Way are already under attack. You may not have seen it yet, but I can hear them. The demons have arrived."</p>
+                    <p>Just as Phantom finished speaking, the ground shook violently. A low, monstrous growl echoed from outside.</p>
+                    <p>Neorock's breathing grew uneven. This couldn't be real. This had to be a dream, right?</p>
+                    <p>Phantom extended his hand. "Neorock, you must choose now. Stay here and be consumed by darkness, or come with me and fight for the multiverse."</p>
+                    <p>Neorock clenched his fists. His heart told him the choice was already made.</p>
+                    <p>"I'll go with you," he said firmly.</p>
+                    <p>Phantom gave a single nod. "Then let's go."</p>
+
+                    <h2 class="text-center mb-4">The Multiverse Gateway</h2>
+                    <p>The swirling energy of the portal surrounded them, and in a flash, they landed on a massive floating platform.</p>
+                    <p>Neorock gasped as he took in the sight—endless portals, each one leading to a different universe. Above each portal, a glowing nameplate displayed the universe's name. Below the names, floating screens showed the date, time, year, and planet selector.</p>
+                    <p>"Where are we?" Neorock asked.</p>
+                    <p>"This is the Multiverse Gateway," Phantom explained. "It is the center of the multiverse. Every universe is connected through this place."</p>
+                    <p>Neorock noticed Phantom walking toward a particular portal. It was marked:</p>
+                    <p class="text-center font-bold">NEXUS UNIVERSE</p>
+                    <p class="text-center font-bold">Planet: Herlek</p>
+                    <p>Phantom adjusted the settings to Herlek, and without hesitation, they stepped inside.</p>
+
+                    <h2 class="text-center mb-4">Arrival at Herlek</h2>
+                    <p>The air around them shimmered, and within seconds, they emerged onto a vast futuristic world.</p>
+                    <p>Neorock's mouth fell open. The city before him was breathtaking—tall, sleek buildings lined with glowing blue circuits, hovering vehicles moving smoothly in the sky, and lush green forests mixed with modern technology. Rivers glowed with an ethereal light, and mountains stood tall, their peaks touching the sky.</p>
+                    <p>"This is… incredible," Neorock whispered.</p>
+                    <p>Phantom's face remained serious. "Yes, but Herlek was not always like this."</p>
+                    <p>Neorock turned to him. "What do you mean?"</p>
+                    <p>Phantom let out a deep breath.</p>
+
+                    <h2 class="text-center mb-4">The Fall of the Multiverse</h2>
+                    <p>"Many years ago, the multiverse was peaceful. The Nexus Universe was its center, and Herlek was the most advanced planet of all. Our people had technology beyond your imagination, but we also lived in harmony with nature.</p>
+                    <p>But then… the darkness came."</p>
+                    <p>Neorock stiffened. "Darkness?"</p>
+                    <p>Phantom nodded. "The demon lord Arengoth. His army rose from the depths of the multiverse, conquering one universe after another. We fought back, but it was not enough.</p>
+                    <p>Our Nexus Universe controlled the multiverse, except for one universe—Parlent. That was already a land of demons. It became their base, their stronghold. And from there, they attacked."</p>
+                    <p>Neorock swallowed hard. "And you lost?"</p>
+                    <p>Phantom clenched his fists. "We lost everything. Herlek fell. Its people were wiped out."</p>
+                    <p>Neorock stared at the ground. "But if Herlek was destroyed, then how is this city here?"</p>
+                    <p>Phantom's silver eyes softened. "Because me and my friend Vault survived. We rebuilt what we could. But Herlek is not truly safe. The only thing keeping the demons out is the energy shield around this city."</p>
+                    <p>Neorock's mind was spinning. So much information… and yet, something still didn't make sense.</p>
+                    <p>He looked up at Phantom. "Then why did you come for me?"</p>
+                    <p>Phantom placed a hand on Neorock's shoulder.</p>
+                    <p>"Because, Neorock… you are the last hope of the multiverse."</p>
+
+                    <h2 class="text-center mb-4">The Truth about Earth</h2>
+                    <p>Neorock's chest tightened. "You keep saying that the Milky Way is in danger… but Earth still looks normal."</p>
+                    <p>Phantom's face turned grim.</p>
+                    <p>"You don't understand. The Milky Way is already lost."</p>
+                    <p>Neorock's blood ran cold. "What?"</p>
+                    <p>Phantom turned to the sky, his eyes filled with sorrow. "The shaking you felt in your room, the strange voices you heard… that was the moment the demons arrived."</p>
+                    <p>Neorock's heart pounded. "But that means—"</p>
+                    <p>Phantom nodded. "Earth, your home… is already in Arengoth's hands. The people may not realize it yet, but the invasion has begun. If we do nothing, Earth will be completely consumed by darkness, but we can't do anything, we don't have that much power."</p>
+                    <p>Neorock felt his entire world shatter. His home… his family… everything was already lost?</p>
+                    <p>Phantom knelt beside him. "But you, Neorock, still have a chance to fight. If you train, if you grow strong… you can save them. You can save the multiverse, and Arengoth will not kill your family and other people but will make them as his worker or will keep them in prisons."</p>
+                    <p>Neorock clenched his fists.</p>
+                    <p>He was no hero. He was just a kid.</p>
+                    <p>But if Earth was truly in danger… he couldn't just sit back and do nothing.</p>
+                    <p>Taking a deep breath, Neorock looked Phantom straight in the eye.</p>
+                    <p>"I'll do it. Train me."</p>
+                    <p>Phantom gave a small smile. "Then welcome to Herlek, Neorock. Your journey begins now."</p>
+                    <p>Just as Neorock was trying to process everything, a new figure approached. He was tall and wore a long dark-blue coat with silver linings. His sharp eyes studied Neorock before he smirked.</p>
+                    <p>"So, this is the kid you brought, Phantom?" the man said.</p>
+                    <p>Phantom nodded. "Neorock, this is Vault. He is my closest ally and one of the last survivors of Herlek."</p>
+                    <p>Vault crossed his arms. "If you're going to survive here, kid, you need proper training. And that's where I come in."</p>
+                    <p>Neorock hesitated. "You're going to train me?"</p>
+                    <p>Vault grinned. "That's right. Your training will last ten years. If you want to fight against Arengoth, you'll need to master your abilities first."</p>
+                    <p>Neorock felt a lump in his throat. Ten years… That was longer than he had imagined. But he had already made his decision.</p>
+                    <p>"I'm ready," he said.</p>
+                    <p>Vault chuckled. "Good. Then let's begin."</p>
+
+                    <h2 class="text-center mb-4">A Teacher Like No Other</h2>
+                    <p>Vault led Neorock through the futuristic city, past towering skyscrapers and glowing energy fields. As they walked, Vault spoke, his tone both serious and amused.</p>
+                    <p>"You probably think training means swinging a sword and throwing punches, right?" he asked.</p>
+                    <p>Neorock shrugged. "Isn't that how warriors train?"</p>
+                    <p>Vault chuckled. "That's part of it. But before you can fight, you need to understand <b>what you're fighting for</b>. Power without purpose is just destruction."</p>
+                    <p>Neorock frowned. "Then what am I supposed to do?"</p>
+                    <p>Vault smirked. "First, we talk. You need knowledge before you need strength."</p>
+
+                    <h2 class="text-center mb-4">The Weight of the Multiverse</h2>
+                    <p>Over the next few days, Vault and Neorock had long conversations. They spoke of the history of the Nexus Universe, the rise of Arengoth, and the countless worlds that had already fallen. Vault described battles so intense that entire planets were erased from existence.</p>
+                    <p>"Arengoth doesn't just conquer," Vault explained. "He <b>corrupts</b>. When he takes over a world, he doesn't just rule it—he turns its people into his soldiers. That's why fighting him isn't just about strength. It's about resisting his influence."</p>
+                    <p>Neorock listened carefully, realizing that this war wasn't just about saving Earth. It was about <b>saving the very fabric of reality itself</b>.</p>
+
+                    <h2 class="text-center mb-4">A Decade of Training</h2>
+                    <p>On the third day, Vault took Neorock to a massive training hall. The walls were lined with ancient weapons, energy-infused armor, and technology beyond Earth's imagination.</p>
+                    <p>"Your training begins now," Vault said, tossing Neorock a small, metallic device.</p>
+                    <p>Neorock examined it. "What is this?"</p>
+                    <p>Vault grinned. "A battle core. It enhances your strength, but only if you can control it. <b>Ten years from now, you'll be a warrior. But first, let's see if you can survive a single day.</b>"</p>
+                    <p>Neorock took a deep breath and clenched his fists. <b>This was just the beginning.</b></p>
+                    <p class="text-center mt-8"><em>To Be Continued...</em></p>
+                `
+            },
+            {
+                number: 2,
+                title: "The Trials Begin",
+                content: `
+                    <p>Neorock and Phantom arrived at the vast training grounds of Herlek. The air buzzed with energy, and the ground beneath them shimmered with embedded circuits, reflecting the sky above. Vault stood before them, holding a thick scroll in his hands.</p>
+                    <p>"Here, kid," Vault said, handing the scroll to Neorock. "This is your training timetable. Follow it strictly, or you won't survive."</p>
+                    <p>Neorock unrolled it and felt his breath hitch. The schedule was brutal:</p>
+                    <ul class="list-disc pl-8 my-4 space-y-2">
+                        <li><b>4:00 AM – Wake up & endurance training</b></li>
+                        <li><b>6:00 AM – Combat practice (Hand-to-hand & weapons)</b></li>
+                        <li><b>9:00 AM – Energy control & elemental mastery</b></li>
+                        <li><b>12:00 PM – Short meal break</b></li>
+                        <li><b>12:30 PM – Strength training & sparring</b></li>
+                        <li><b>3:00 PM – Tactical strategy sessions</b></li>
+                        <li><b>6:00 PM – Demonology & multiverse history lessons</b></li>
+                        <li><b>9:00 PM – Final combat drills & meditation</b></li>
+                        <li><b>11:00 PM – Sleep</b></li>
+                    </ul>
+                    <p>Neorock gulped. "This... this is insane."</p>
+                    <p>Vault smirked. "This is survival. If you want to stand a chance against Arengoth, you'll follow every second of it."</p>
+                    <p>Neorock clenched his fists and nodded. "I'll do it."</p>
+
+                    <h2 class="text-center mb-4">The Multiverse's Past</h2>
+                    <p>As they sat down later, Vault began explaining the history of the multiverse.</p>
+                    <p>"Long ago, Nexus was the heart of the multiverse. Our people lived in harmony, alongside mighty heroes and the great King Falcon. But then, the war began."</p>
+                    <p>Neorock listened intently.</p>
+                    <p>"Arengoth's demon army ravaged universe after universe. The heroes fought, but one by one, they fell. Some were slain, others imprisoned. Now, all that remains are the last few survivors… and you, the chosen one."</p>
+                    <p>Neorock took a deep breath. "So, I have to become strong enough to defeat them?"</p>
+                    <p>Vault nodded. "Not just defeat them—bring balance back to the multiverse."</p>
+                    <p>Unbeknownst to them, Phantom had quietly left Herlek without a word.</p>
+
+                    <h2 class="text-center mb-4">Phantom's Journey to Karlos</h2>
+                    <p>Phantom stepped through the glowing portal, arriving at <b>Universe Karlos, Planet Parnet</b>. The land was dark, with crimson skies and burning mountains. The air was thick with the scent of sulfur.</p>
+                    <p>A shadowy figure stepped forward—<b>Arestchin, a powerful demon</b>.</p>
+                    <p>"You came," Arestchin said with a smirk.</p>
+                    <p>Phantom's silver eyes hardened. "Why did you call me?"</p>
+                    <p>Arestchin folded his arms. "You know the history. You know our relationship. I'll say it again—join the demon army. Join us."</p>
+                    <p>Phantom's voice was firm. "No. You're my brother, Arestchin, but I stand with the light, not darkness. Even if it means fighting you."</p>
+                    <p>Arestchin's smirk vanished. "So be it. Be ready to die."</p>
+
+                    <h2 class="text-center mb-4">A Battle between Brothers</h2>
+                    <p>Arestchin attacked first, summoning dark tendrils that lashed toward Phantom. Phantom dodged, countering with a burst of energy, but he was quickly overwhelmed. The power difference was clear.</p>
+                    <p>"You're weak," Arestchin sneered. "Accept the darkness!"</p>
+                    <p>Phantom gasped for breath. As Arestchin charged up his ultimate attack—a dark sphere of destruction—a sudden fireball shot through the air, striking Arestchin and throwing him backward.</p>
+                    <p>Phantom looked up to see Neorock and Vault standing at the portal.</p>
+                    <p>"You didn't think we'd let you fight alone, did you?" Vault smirked.</p>
+                    <p>Together, the three warriors clashed against Arestchin. After an intense battle, they managed to subdue him, sealing him in an unbreakable prison.</p>
+
+                    <h2 class="text-center mb-4">The Truth about Phantom's Past</h2>
+                    <p>After the battle, the three sat in silence, recovering. Vault broke it first. "I saw the arrow that called Phantom here. That's how we knew."</p>
+                    <p>Phantom sighed. "Arestchin is my brother."</p>
+                    <p>Neorock and Vault stared in shock.</p>
+                    <p>"Years ago, a tornado struck our city. It tore everything apart, and Arestchin and I were separated. For years, I searched for him… and when I finally found him, he had already become a demon."</p>
+                    <p>Neorock exhaled. "So, today was the first time you met since then?"</p>
+                    <p>Phantom nodded. "Yes. And now… he is in prison."</p>
+                    <p>The group fell into deep thought. The battle was far from over. The journey had only just begun.</p>
+                    <p class="text-center mt-8"><em>To Be Continued...</em></p>
+                `
+            },
+            {
+                number: 3,
+                title: "The Path of the Warrior",
+                content: `
+                    <h2 class="text-center mb-4">The Beginning of True Training</h2>
+                    <p>The vast training hall echoed with the hum of energy as Neorock stood before Vault. His mentor's piercing eyes held an unreadable expression.</p>
+                    <p>"Training isn't about learning how to fight," Vault began, his voice steady. "It's about learning how to survive."</p>
+                    <p>Neorock swallowed hard. "I'm ready."</p>
+                    <p>Vault smirked. "We'll see."</p>
+                    <p>With a flick of his wrist, Vault activated a battle simulation chamber, and the world around them changed. The ground beneath Neorock's feet cracked as a shadowy figure emerged, glowing red eyes piercing through the darkness.</p>
+                    <p>"Defeat him," Vault ordered.</p>
+                    <p>Neorock lunged forward—but the shadow warrior struck first, knocking him off his feet.</p>
+                    <p>The days blurred into weeks, and weeks into months. Neorock's body ached constantly, but gradually, he grew stronger. Each day brought new challenges—elemental mastery, weapon training, tactical strategy. With every passing month, Neorock's skills improved dramatically.</p>
+                    <p class="text-center mt-8"><em>Content continues with Neorock's training journey and growth as a warrior...</em></p>
+                `
+            },
+            {
+                number: 4,
+                title: "The Battle of Xeanephis",
+                content: `
+                    <h2 class="text-center mb-4">The Search for the Nine</h2>
+                    <p>Neorock's journey began in Milky Way, his home universe. He had seen the future—a war that would consume existence itself. Xivoris, the Shadow Tyrant, was rising, and alone, Neorock could not stop him. He needed warriors, forged in battle, shaped by loss, and bound by destiny.</p>
+                    <p>One by one, he sought them out across the multiverse, venturing into realms where only the strong survived.</p>
+                    <ul class="list-disc pl-8 my-4 space-y-2">
+                        <li><b>Celestrae</b> – He found Ragnar, the Starborn Berserker, fighting celestial titans. "If Xivoris thinks he can take my universe, he'll have to fight my axe first."</li>
+                        <li><b>Echoxspense</b> – He found Nova, the Phantom Huntress, hidden in shadows. "Even darkness needs light to exist. I'll fight to make sure it stays that way."</li>
+                    </ul>
+                    <p class="text-center mt-8"><em>Content continues with Neorock gathering his team of warriors across the multiverse...</em></p>
+                `
+            },
+            {
+                number: 5,
+                title: "The Battle of Keoranis",
+                content: `
+                    <h2 class="text-center mb-4">The Search for Soultear Begins</h2>
+                    <p>Neorock assigned Acetsu and Nova to locate the legendary weapon Soultear, a sword capable of cutting through the very essence of demons. Vault, the enigmatic guardian, instructed Neorock to focus on defending Herlek, a strategic world vital for the war. With responsibilities divided, each member set off on their assigned missions.</p>
+                    <p>Meanwhile, the mighty demon Traegoth, a loyal demon of Arengoth, had fallen to darkness. He saw Neorock's growing influence as a threat to his own power and unleashed his personal Traeth Army, assigning his most formidable demons, Haresen and Faroe, to strike first.</p>
+                    <p class="text-center mt-8"><em>Content continues with the battle for Keoranis...</em></p>
+                `
+            },
+            {
+                number: 6,
+                title: "The Sons of Traegoth",
+                content: `
+                    <h2 class="text-center mb-4">The Final Battle Against the Traeth Army</h2>
+                    <p>The war on Keoranis raged on, the battlefield soaked in fire and destruction. Neorock and his allies fought relentlessly, pushing back the Traeth Army, warriors of darkness loyal to Traegoth.</p>
+                    <p>Phantom Vault struck with his shadow abilities, weaving through enemies and cutting them down with precise blows. Ragnar and Xilangis fought side by side, their brutal teamwork breaking enemy lines. Velora and Mayura unleashed elemental fury, burning through hordes of demons. Nova's arrows pierced the sky, eliminating key commanders. Meanwhile, Neorock himself clashed directly with the last standing generals, pushing his power to its limits.</p>
+                    <p class="text-center mt-8"><em>Content continues with the epic battle against Traegoth's forces...</em></p>
+                `
+            },
+            {
+                number: 7,
+                title: "The Awakening of Soultear",
+                content: `
+                    <h2 class="text-center mb-4">The Battle against Marcus</h2>
+                    <p>The battlefield was drenched in blood and ash as Neorock and his team faced the formidable demon Marcus. The air crackled with tension, the sounds of clashing steel and dying screams echoing across the ruins of Herlek. The battle had taken its toll—many of Neorock's allies lay wounded, barely able to stand, yet they refused to back down. Marcus, a towering beast with crimson eyes and a jagged obsidian blade, stood unshaken, his power seemingly endless.</p>
+                    <p>With a mighty swing, Marcus sent Ragnar crashing into a boulder, leaving him unconscious. Velora tried to summon her energy but fell to her knees, exhausted. Xilangis and Acetsu barely held their ground as Marcus unleashed his devastating power.</p>
+                    <p class="text-center mt-8"><em>Content continues with the battle against Marcus and the awakening of Soultear...</em></p>
+                `
+            },
+            {
+                number: 8,
+                title: "The Training of the Team",
+                content: `
+                    <h2 class="text-center mb-4">Talking with Master Shingkun</h2>
+                    <p>Neorock now gathered his team and addressed them with determination. "Now is the time. We have to bring back Master Shingkun from Herlek," he declared. However, as soon as the words left his mouth, Nova's expression darkened with fear.</p>
+                    <p>"What if Lapras and Kulharis have already killed Master?" Nova's voice wavered with worry. The idea sent chills through the team, but before the concern could escalate, Senafis stepped forward with a calm demeanor.</p>
+                    <p>"Master Shingkun is a clever and intelligent warrior. He would be fine," Senafis reassured them.</p>
+                    <p>Just then, a familiar voice echoed through the air. "Did someone call for me?"</p>
+                    <p>The team turned around in shock, only to find Master Shingkun standing at the entrance, his wise eyes twinkling with amusement.</p>
+                    <p class="text-center mt-8"><em>Content continues with Master Shingkun training the team...</em></p>
+                `
+            },
+            {
+                number: 9,
+                title: "The Awakening of Soultear",
+                content: `
+                    <p>Neorock and his team were ready to train, knowing that the war was only going to get harder. Master Shingkun approached Neorock, his face stern, and delivered a grave warning. "Neorock, this time if you fail to control even 20% of Soultear's power, it will destroy you. Currently, you are wielding only 10%. If you are unable to withstand its strength, Soultear itself will turn against you."</p>
+                    <p>Determined to master the power of Soultear, Neorock trained relentlessly. Days turned into weeks, and his strength increased. Soon, under the guidance of Master Shingkun, he managed to elevate his control to 30%. Satisfied with the progress, Master Shingkun decided that the next phase of training must take place on a different plane.</p>
+                    <p class="text-center mt-8"><em>Content continues with Neorock's journey to master Soultear...</em></p>
+                `
+            },
+            {
+                number: 10,
+                title: "The Shadow Within",
+                content: `
+                    <h2 class="text-center mb-4">The Morning Mystery</h2>
+                    <p>The morning air in Celestrae was heavy with a strange tension.</p>
+                    <p>On the morning, Senafis came worried.</p>
+                    <p>"Has anyone seen Waegon?" he asked, his voice laced with urgency.</p>
+                    <p>Velora, tilting her head, responded, "Ah, that soldier you assigned to secure the planet?"</p>
+                    <p>Senafis nodded. "Yes, and I haven't seen him since last night. I spoke to him then, but since morning, he's been missing."</p>
+                    <p>Ragnar thought for a moment. "I saw him yesterday morning, but not after that."</p>
+                    <p>Just then, Nova arrived, yawning. "Good morning, guys. What's going on?"</p>
+                    <p>Neorock smirked. "Good morning, sleepy Nova. Maybe you should wake up later. It's only 10 AM."</p>
+                    <p>"Ah, okay, I'm sorry," Nova replied groggily. "But why are you so worried, Senafis?"</p>
+                    <p class="text-center mt-8"><em>Content continues with the investigation of Waegon's disappearance...</em></p>
+                `
+            },
+            {
+                number: 11,
+                title: "The Rising Tension",
+                content: `
+                    <h2 class="text-center mb-4">The Traeo Planet</h2>
+                    <p>Phantom, Vault, and Akio sat in the dark, damp prison cell, their minds racing with desperation. They knew that someone within Neorock's team was a traitor, and if they didn't warn him soon, it could lead to disaster. Phantom gritted his teeth, his sharp mind running through possible ways to get the message out. "We have to send him a letter," Phantom whispered. "A direct message—short and urgent. If we fail, Neorock will be walking into a trap."</p>
+                    <p>Akio nodded and quickly tore a piece of cloth from his already tattered shirt. Dipping his fingers into a small puddle of black ink left by the careless guards, he scribbled the warning: "Someone is betraying you, Neorock ~ Phantom."</p>
+                    <p class="text-center mt-8"><em>Content continues with the revelation of betrayal and rising tensions...</em></p>
+                `
+            },
+            {
+                number: 12,
+                title: "Shadows of Doubt",
+                content: `
+                    <h2 class="text-center mb-4">The Aftermath</h2>
+                    <p>The day after Waegoes's murder, the team was tense and anxious. Mayura's suspicion about Shashmaag was growing stronger. Neorock decided they needed to focus on training, but the unresolved mystery hung over them like a storm.</p>
+                    <p>Neorock and Master Shingkun designed a new training regimen focused on mental resilience and combat efficiency. The soldiers engaged in rigorous physical exercises, endurance runs through treacherous terrains, and combat simulations designed to mimic the chaos of battle. Neorock's sessions with Soultear became more intense, with Shingkun pushing him through meditative combat drills and spiritual synchronization exercises.</p>
+                    <p class="text-center mt-8"><em>Content continues with the team's training and the growing suspicions...</em></p>
+                `
+            },
+            {
+                number: 13,
+                title: "The Price of Valor",
+                content: `
+                    <h2 class="text-center mb-4">Result of Battle on Xarvion</h2>
+                    <p>The battle on Xarvion had left the team scarred and weary. Though they had triumphed over Zaelthar, the wounds of war ran deep, and the loss of Torgan weighed heavily on their spirits. His sacrifice had not been in vain, but it was a grim reminder that every battle took its toll.</p>
+                    <p>Back at their base, Neorock gathered the team to strategize. "Gaeth's forces are relentless. We can't afford to be reactive. We must take the fight to them before they overwhelm us."</p>
+                    <p>Mayura, still grappling with her growing suspicions of Shashmaag, continued her secret surveillance. With Nova's assistance, she managed to tap into the security feeds, tracking his movements.</p>
+                    <p class="text-center mt-8"><em>Content continues with the team's recovery and planning...</em></p>
+                `
+            },
+            {
+                number: 14,
+                title: "The Wrath of the Abyss",
+                content: `
+                    <h2 class="text-center mb-4">The Aftermath</h2>
+                    <p>The aftermath of Torgan's death weighed heavily on the team. Neorock, Ragnar, and the others carried his memory with them, vowing that his sacrifice would not be in vain. The war against Gaeth was intensifying, and with each battle, the enemy's strategies were becoming more unpredictable.</p>
+                    <p>Back at their base, Mayura and Nova continued their covert surveillance of Shashmaag. His movements were carefully calculated, his words precise, and yet, something felt inherently wrong. Mayura had intercepted a transmission—a coded message sent to an unknown location. It was brief, but the implications were dire.</p>
+                    <p>"He's communicating with someone outside of our network," Mayura whispered to Nova. "And I have a strong feeling about who it might be."</p>
+                    <p class="text-center mt-8"><em>Content continues with the investigation of Shashmaag...</em></p>
+                `
+            },
+            {
+                number: 15,
+                title: "The Storm Before the Inferno",
+                content: `
+                    <h2 class="text-center mb-4">New Threats</h2>
+                    <p>The battle for Velkris had left deep scars—physically and emotionally. Neorock and his team barely had time to grieve for Kailen before another storm brewed on the horizon. With Shashmaag's betrayal now almost certain, Mayura and Nova increased their surveillance efforts, determined to catch him in the act. The tension among the team was palpable; trust was wavering, and the war against Gaeth was only growing fiercer.</p>
+                    <p>Meanwhile, another challenge loomed. A new message from Gaeth's forces arrived, as expected—a challenge delivered by Verathos, a demon wielding the power of thunder and storms. His message was simple yet chilling: "Meet me on the planet of Azrath, or I will bring the storm to you."</p>
+                    <p class="text-center mt-8"><em>Content continues with the team preparing to face Verathos...</em></p>
+                `
+            },
+            {
+                number: 16,
+                title: "The Fall of Gaeth",
+                content: `
+                    <h2 class="text-center mb-4">A New Challenge</h2>
+                    <p>The storm of Azrath had passed, but the war against Gaeth raged on. Neorock and his team barely had time to process their losses before the next challenge came knocking. A new demon general had emerged—Maldrak, the Executioner, known for his brutal efficiency and mastery of war tactics. His message was simple: "Face me on the battlefield of Xelthar, or I will bring ruin to your allies."</p>
+                    <p>Xelthar was a wasteland of shattered bones and cursed remnants of past battles, a graveyard of warriors long forgotten. With no choice but to engage, Neorock and his team prepared for yet another deadly confrontation.</p>
+                    <p class="text-center mt-8"><em>Content continues with the team's journey to Xelthar...</em></p>
+                `
+            },
+            {
+                number: 17,
+                title: "The Fall of Gaeth's new Demon",
+                content: `
+                    <h2 class="text-center mb-4">The Challenge</h2>
+                    <p>The war against Gaeth's forces had reached its peak. With the loss of Joren still fresh in their hearts, Neorock and his team knew they could not afford any more setbacks. Mayura and Nova continued their surveillance on Shashmaag, gathering more proof of his treachery, while the others prepared for yet another challenge. Gaeth's next move came swiftly—a messenger demon arrived, bearing an ominous challenge.</p>
+                    <p>"Come to the volcanic world of Pyrithos. Face me and my champion, or your rebellion will end in flames."</p>
+                    <p>It was a trap, of that they were certain, but they had no choice but to accept. The team set off, knowing this battle would be among their toughest yet.</p>
+                    <p class="text-center mt-8"><em>Content continues with the battle on Pyrithos...</em></p>
+                `
+            },
+            {
+                number: 18,
+                title: "The Fall of Traeth's Army",
+                content: `
+                    <h2 class="text-center mb-4">The Web of Betrayal</h2>
+                    <p>The battle against the demons had reached its boiling point. With Neorock leading the charge, the warriors had their eyes set on destroying Traegoth's forces once and for all. But as they prepared for war, the greatest betrayal was yet to unfold.</p>
+                    <p>In the command center of the resistance, Neorock assigned Nova and Ragnar as spies, sending them deep into enemy territory. Meanwhile, Senafis was stationed at the planetary command post, overseeing operations and ensuring flawless execution of their battle plans.</p>
+                    <p>Neorock turned to Shashmaag. "You will remain here on the planet and be ready when we need reinforcements."</p>
+                    <p>Shashmaag nodded with a subtle smirk, unnoticed by most. But Mayura caught it, her suspicions growing stronger.</p>
+                    <p class="text-center mt-8"><em>Content continues with the revelation of Shashmaag's betrayal...</em></p>
+                `
+            },
+            {
+                number: 19,
+                title: "Wrath of Traegoth",
+                content: `
+                    <h2 class="text-center mb-4">The Aftermath</h2>
+                    <p>The ashes of the battlefield had barely settled, yet the air still crackled with tension. Shashmaag's betrayal had shaken the warriors to their core, but his treachery had been answered with steel and fire. Neorock's forces had emerged victorious, yet the cost had been steep—Akio's sacrifice, the blood of countless allies spilled across the stars. But there was no time to grieve. War did not wait for mourning.</p>
+                    <p>The moment of respite was brief. Traegoth, father of Lapras and Kulharis, had arrived. His voice boomed through the war-torn remains of the battlefield, his towering form dark against the infernal skies.</p>
+                    <p>"Neorock!" Traegoth's fury was immeasurable. "You dare to slaughter my blood! My sons! You will pay with your life and the lives of all who follow you!"</p>
+                    <p class="text-center mt-8"><em>Content continues with the confrontation with Traegoth...</em></p>
+                `
+            },
+            {
+                number: 20,
+                title: "The Final Reckoning",
+                content: `
+                    <h2 class="text-center mb-4">A Time of Recovery</h2>
+                    <p>The war had raged across the multiverse, leaving behind a trail of destruction and loss. Gaeth had fallen, but his final words still echoed in Neorock's mind: "This is my end, but not the end of darkness." It was a warning, a promise that something even more sinister was yet to come. The team had no time to celebrate. The battle against the forces of darkness was not over. Selavis, the Devourer of Worlds, remained—a nightmare beyond imagination.</p>
+                    <p>After Gaeth's fall, the warriors needed time to recover. Wounds were treated, armor was reforged, and strategies were discussed. The atmosphere was heavy with both grief and determination. Akio's sacrifice still haunted Velora, and Nova struggled with the weight of the lives she had taken. But they knew their mission was far from over.</p>
+                    <p class="text-center mt-8"><em>Content continues with the final confrontation against the ultimate darkness...</em></p>
+                    <p class="text-center mt-12 text-xl font-bold">End of Season 1: The Awakening</p>
+                `
+            }
+        ];
+
+        // Generate volume buttons
+        function generateVolumeButtons() {
+            const volumeGrid = document.querySelector('.volume-grid');
+            volumeGrid.innerHTML = '';
+            
+            for (let i = 0; i < volumes.length; i++) {
+                const volume = volumes[i];
+                const button = document.createElement('button');
+                button.className = 'volume-btn rounded-lg p-4 text-center focus:outline-none';
+                button.innerHTML = `
+                    <span class="block text-2xl font-bold mb-1">Vol ${volume.number}</span>
+                    <span class="block text-sm">${volume.title}</span>
+                `;
+                button.onclick = function() {
+                    loadVolume(volume.number);
+                };
+                volumeGrid.appendChild(button);
+            }
+        }
+
+        // Load volume content
+        function loadVolume(volumeNumber) {
+            const volume = volumes.find(v => v.number === volumeNumber);
+            if (!volume) return;
+            
+            document.getElementById('volumeSelector').style.display = 'none';
+            document.getElementById('contentContainer').style.display = 'block';
+            
+            document.getElementById('volumeTitle').innerHTML = `Volume ${volume.number}: ${volume.title}`;
+            document.getElementById('contentSection').innerHTML = volume.content;
+            
+            document.getElementById('contentContainer').classList.add('portal-enter');
+            setTimeout(() => {
+                document.getElementById('contentContainer').classList.remove('portal-enter');
+            }, 800);
+            
+            // Update navigation buttons
+            updateNavButtons(volumeNumber);
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Update navigation buttons
+        function updateNavButtons(currentVolumeNumber) {
+            const prevButton = document.getElementById('prevVolume');
+            const nextButton = document.getElementById('nextVolume');
+            
+            if (currentVolumeNumber === 1) {
+                prevButton.disabled = true;
+                prevButton.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                prevButton.disabled = false;
+                prevButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                prevButton.onclick = function() {
+                    loadVolume(currentVolumeNumber - 1);
+                };
+            }
+            
+            if (currentVolumeNumber === volumes.length) {
+                nextButton.disabled = true;
+                nextButton.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                nextButton.disabled = false;
+                nextButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                nextButton.onclick = function() {
+                    loadVolume(currentVolumeNumber + 1);
+                };
+            }
+        }
+
+        // Show volume selector
+        function showVolumeSelector() {
+            document.getElementById('contentContainer').style.display = 'none';
+            document.getElementById('volumeSelector').style.display = 'block';
+        }
+
+        // Select season
+        function selectSeason(seasonNumber) {
+            if (seasonNumber === 1) {
+                document.getElementById('season1Btn').classList.add('active', 'pulse');
+                document.getElementById('volumeSelector').style.display = 'block';
+            }
+        }
+
+        // Initialize the page
+        window.onload = function() {
+            createStars();
+            generateVolumeButtons();
+            selectSeason(1);
+        };
+    </script>
+</body>
+</html>
